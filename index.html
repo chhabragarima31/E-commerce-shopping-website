@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>LUMORA — Your Style. Your Moment.</title>
+
+  <link rel="stylesheet" href="style.css">
+
+  <script>
+    /* Skip the welcome screen if it was already shown this session */
+    try {
+      if (sessionStorage.getItem("lumora_welcomed") === "1") {
+        document.documentElement.classList.add("no-loader");
+      }
+    } catch (e) {}
+  </script>
+</head>
+
+<body>
+
+  <!-- Welcome / loading screen -->
+  <div class="loader" id="loader" aria-hidden="true">
+
+    <div class="loader-sparkles">
+      <span>✦</span><span>✧</span><span>✦</span><span>✧</span>
+      <span>✦</span><span>✧</span><span>✦</span>
+    </div>
+
+    <div class="loader-inner">
+      <h1 class="loader-logo">LUM<span>O</span>RA</h1>
+      <p class="loader-welcome">Welcome to your style moment ✨</p>
+      <div class="loader-bar"><div class="loader-fill"></div></div>
+      <p class="loader-sub">Styling your experience...</p>
+    </div>
+
+  </div>
+
+  <canvas id="sparkle-canvas"></canvas>
+
+
+  
+  <header class="site-header" id="siteHeader">
+
+    <div class="header-top container">
+
+      <button class="hamburger" id="hamburger" aria-label="Menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+
+      <a href="#/home" class="logo">LUM<span>O</span>RA</a>
+
+      <div class="search-bar">
+        <input
+          type="text"
+          id="searchInput"
+          placeholder="Search dresses, jeans, co-ords..."
+        >
+        <button id="searchBtn">🔍</button>
+      </div>
+
+      <div class="header-icons">
+
+        <button class="icon-btn" id="wishlistBtn" aria-label="Wishlist">
+          ♡
+          <span class="badge" id="wishlistCount">0</span>
+        </button>
+
+        <button class="icon-btn" id="cartBtn" aria-label="Cart">
+          🛍
+          <span class="badge" id="cartCount">0</span>
+        </button>
+
+      </div>
+
+    </div>
+
+
+    <nav class="main-nav" id="mainNav">
+
+      <a href="#/home" class="nav-link active" data-route="home">
+        Home
+      </a>
+
+      <a href="#/women" class="nav-link" data-route="women">
+        Women
+      </a>
+
+      <a href="#/men" class="nav-link" data-route="men">
+        Men
+      </a>
+
+      <a href="#/kids" class="nav-link" data-route="kids">
+        Kids
+      </a>
+
+      <a href="#/new" class="nav-link" data-route="new">
+        New Arrivals
+      </a>
+
+      <a href="#/sale" class="nav-link sale-link" data-route="sale">
+        Sale
+      </a>
+
+      <div class="nav-auth">
+
+        <div class="auth-guest" id="authGuest">
+          <a href="#/login" class="nav-link" data-route="login">Login</a>
+          <a href="#/signup" class="nav-link nav-signup" data-route="signup">Sign Up</a>
+        </div>
+
+        <div class="auth-user" id="authUser" hidden>
+          <span class="nav-greeting" id="navGreeting"></span>
+          <button type="button" class="nav-link nav-logout" id="logoutBtn">Logout</button>
+        </div>
+
+      </div>
+
+    </nav>
+
+  </header>
+
+
+
+  
+  <section class="hero" id="home" data-view="home">
+
+    <div class="hero-sparkles" aria-hidden="true">
+      <span class="spark s1">✦</span>
+      <span class="spark s2">✧</span>
+      <span class="spark s3">✦</span>
+      <span class="spark s4">✧</span>
+      <span class="spark s5">✦</span>
+      <span class="spark s6">✧</span>
+    </div>
+
+    <div class="hero-content container">
+
+      <p class="hero-eyebrow">New Season Drop</p>
+
+      <h1 class="hero-title">
+        YOUR STYLE.<br>
+        YOUR MOMENT.
+      </h1>
+
+      <p class="hero-sub">
+        Curated fits for the girl who never blends in.
+        Fresh drops weekly, made to be seen.
+      </p>
+
+      <a href="#/shop" class="btn btn-primary shop-now">
+        SHOP NOW
+      </a>
+
+    </div>
+
+    <div class="hero-image">
+      <img
+        src="https://images.unsplash.com/photo-1509631179647-0177331693ae?w=800&q=80"
+        alt="Fashion model in pink outfit"
+      >
+    </div>
+
+  </section>
+
+
+
+ 
+  <section class="categories" id="categories" data-view="home">
+
+    <div class="container">
+
+      <h2 class="section-title">
+        Shop by Category
+      </h2>
+
+      <div class="category-grid" id="categoryGrid"></div>
+
+    </div>
+
+  </section>
+
+
+
+
+  <section class="strip" id="trending" data-view="home">
+
+    <div class="container">
+
+      <h2 class="section-title">
+        Trending Now
+      </h2>
+
+      <div class="product-scroll" id="trendingScroll"></div>
+
+    </div>
+
+  </section>
+
+
+
+ 
+  <section class="products-section" id="products" data-view="shop">
+
+    <div class="container">
+
+      <h2 class="section-title" id="shopTitle">All Products</h2>
+
+      <p class="shop-sub" id="shopSub"></p>
+
+
+      <div class="filters-bar">
+
+        <div class="filter-group">
+
+          <label for="categoryFilter">
+            Category
+          </label>
+
+          <select id="categoryFilter">
+            <option value="all">All</option>
+            <option value="Women">Women</option>
+            <option value="Men">Men</option>
+            <option value="Kids">Kids</option>
+            <option value="Dresses">Dresses</option>
+            <option value="Tops">Tops</option>
+            <option value="Jeans">Jeans</option>
+            <option value="Co-ords">Co-ords</option>
+            <option value="Accessories">Accessories</option>
+          </select>
+
+        </div>
+
+
+        <div class="filter-group">
+
+          <label for="priceFilter">
+            Max Price: ₹<span id="priceValue">3000</span>
+          </label>
+
+          <input
+            type="range"
+            id="priceFilter"
+            min="300"
+            max="3000"
+            step="100"
+            value="3000"
+          >
+
+        </div>
+
+
+        <div class="filter-group">
+
+          <label for="sortSelect">
+            Sort By
+          </label>
+
+          <select id="sortSelect">
+            <option value="default">Featured</option>
+            <option value="price-low">Price: Low to High</option>
+            <option value="price-high">Price: High to Low</option>
+            <option value="rating">Top Rated</option>
+          </select>
+
+        </div>
+
+
+        <button class="btn btn-outline" id="resetFilters">
+          Show All
+        </button>
+
+      </div>
+
+
+      <p class="results-count" id="resultsCount"></p>
+
+      <div class="product-grid" id="productGrid"></div>
+
+    </div>
+
+  </section>
+
+
+
+  
+  <section class="strip alt" id="newArrivals" data-view="home">
+
+    <div class="container">
+
+      <h2 class="section-title">
+        New Arrivals
+      </h2>
+
+      <div class="product-scroll" id="newArrivalsScroll"></div>
+
+    </div>
+
+  </section>
+
+
+
+  
+  <section class="strip" id="bestSellers" data-view="home">
+
+    <div class="container">
+
+      <h2 class="section-title">
+        Best Sellers
+      </h2>
+
+      <div class="product-scroll" id="bestSellersScroll"></div>
+
+    </div>
+
+  </section>
+
+
+
+ 
+  <section class="sale-banner" id="sale" data-view="home">
+
+    <div class="container sale-banner-inner">
+
+      <div>
+
+        <p class="hero-eyebrow light">
+          Limited Time
+        </p>
+
+        <h2>
+          UP TO 50% OFF
+        </h2>
+
+        <p>
+          Grab your favorites before they're gone ✨
+        </p>
+
+        <a href="#/sale" class="btn btn-light">
+          SHOP THE SALE
+        </a>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+
+
+  <section class="reviews" data-view="home">
+
+    <div class="container">
+
+      <h2 class="section-title">
+        Loved By Our Customers
+      </h2>
+
+      <div class="review-grid" id="reviewGrid"></div>
+
+    </div>
+
+  </section>
+
+
+
+ 
+  <section class="insta-gallery" data-view="home">
+
+    <div class="container">
+
+      <h2 class="section-title">
+        @lumora.style
+      </h2>
+
+      <div class="insta-grid" id="instaGrid"></div>
+
+    </div>
+
+  </section>
+
+
+
+  <!-- Login -->
+  <section class="auth-section" id="loginView" data-view="login">
+
+    <div class="auth-card">
+
+      <h2 class="auth-title">Welcome Back</h2>
+      <p class="auth-sub">Log in to your LUMORA account ✨</p>
+
+      <form id="loginForm" novalidate>
+
+        <div class="auth-msg" id="loginMsg" role="alert"></div>
+
+        <input type="email" id="loginEmail" placeholder="Email" autocomplete="email">
+        <input type="password" id="loginPassword" placeholder="Password" autocomplete="current-password">
+
+        <button type="submit" class="btn btn-primary btn-full">LOG IN</button>
+
+      </form>
+
+      <p class="auth-switch">New here? <a href="#/signup">Create an account</a></p>
+
+    </div>
+
+  </section>
+
+
+  <!-- Signup -->
+  <section class="auth-section" id="signupView" data-view="signup">
+
+    <div class="auth-card">
+
+      <h2 class="auth-title">Join LUMORA</h2>
+      <p class="auth-sub">Create your account and start styling 💖</p>
+
+      <form id="signupForm" novalidate>
+
+        <div class="auth-msg" id="signupMsg" role="alert"></div>
+
+        <input type="text" id="signupName" placeholder="Full Name" autocomplete="name">
+        <input type="email" id="signupEmail" placeholder="Email" autocomplete="email">
+        <input type="password" id="signupPassword" placeholder="Password (min 6, letter + number)" autocomplete="new-password">
+        <input type="password" id="signupConfirm" placeholder="Confirm Password" autocomplete="new-password">
+
+        <button type="submit" class="btn btn-primary btn-full">SIGN UP</button>
+
+      </form>
+
+      <p class="auth-switch">Already have an account? <a href="#/login">Log in</a></p>
+
+    </div>
+
+  </section>
+
+
+
+  <!-- Newsletter -->
+  <section class="newsletter">
+
+    <div class="container newsletter-inner">
+
+      <h2>
+        Join the Lumora Club
+      </h2>
+
+      <p>
+        Get 10% off your first order + early access to drops.
+      </p>
+
+      <form id="newsletterForm">
+
+        <input
+          type="email"
+          id="newsletterEmail"
+          placeholder="Enter your email"
+          required
+        >
+
+        <button type="submit" class="btn btn-primary">
+          SUBSCRIBE
+        </button>
+
+      </form>
+
+    </div>
+
+  </section>
+
+
+
+  <!-- Footer -->
+  <footer class="site-footer">
+
+    <div class="container footer-grid">
+
+      <div>
+
+        <h3 class="logo">
+          LUM<span>O</span>RA
+        </h3>
+
+        <p>
+          Fashion that feels like you. Designed for the bold,
+          the soft, and everything between.
+        </p>
+
+      </div>
+
+
+      <div>
+
+        <h4>Shop</h4>
+
+        <a href="#/women">Women</a>
+        <a href="#/men">Men</a>
+        <a href="#/kids">Kids</a>
+        <a href="#/sale">Sale</a>
+
+      </div>
+
+
+      <div>
+
+        <h4>Help</h4>
+
+        <a href="#">Track Order</a>
+        <a href="#">Returns</a>
+        <a href="#">Shipping Info</a>
+        <a href="#">Contact Us</a>
+
+      </div>
+
+
+      <div>
+
+        <h4>Follow</h4>
+
+        <a href="#">Instagram</a>
+        <a href="#">TikTok</a>
+        <a href="#">Pinterest</a>
+
+      </div>
+
+    </div>
+
+
+    <p class="footer-bottom">
+      © 2026 LUMORA. All rights reserved.
+    </p>
+
+  </footer>
+
+
+
+  <!-- Product Details -->
+  <div class="overlay" id="overlay"></div>
+
+  <div class="modal product-modal" id="productModal">
+
+    <button class="modal-close" data-close="productModal">
+      ✕
+    </button>
+
+    <div
+      class="product-modal-body"
+      id="productModalBody"
+    ></div>
+
+  </div>
+
+
+
+  <!-- Cart -->
+  <div class="modal cart-panel" id="cartPanel">
+
+    <div class="cart-header">
+
+      <h3>
+        Your Bag (<span id="cartPanelCount">0</span>)
+      </h3>
+
+      <button class="modal-close" data-close="cartPanel">
+        ✕
+      </button>
+
+    </div>
+
+    <div class="cart-items" id="cartItems"></div>
+
+    <div class="cart-summary" id="cartSummary"></div>
+
+  </div>
+
+
+
+  <!-- Wishlist -->
+  <div class="modal wishlist-panel" id="wishlistPanel">
+
+    <div class="cart-header">
+
+      <h3>
+        Wishlist (<span id="wishlistPanelCount">0</span>)
+      </h3>
+
+      <button class="modal-close" data-close="wishlistPanel">
+        ✕
+      </button>
+
+    </div>
+
+    <div class="wishlist-items" id="wishlistItems"></div>
+
+  </div>
+
+
+
+  <!-- Checkout -->
+  <div class="modal checkout-modal" id="checkoutModal">
+
+    <button class="modal-close" data-close="checkoutModal">
+      ✕
+    </button>
+
+    <div class="checkout-body">
+
+      <h2>
+        Checkout
+      </h2>
+
+      <form id="checkoutForm">
+
+        <div class="checkout-grid">
+
+          <div class="checkout-fields">
+
+            <input
+              type="text"
+              id="ckName"
+              placeholder="Full Name"
+              required
+            >
+
+            <input
+              type="email"
+              id="ckEmail"
+              placeholder="Email"
+              required
+            >
+
+            <input
+              type="tel"
+              id="ckPhone"
+              placeholder="Phone Number"
+              required
+              pattern="[0-9]{10}"
+            >
+
+            <input
+              type="text"
+              id="ckAddress"
+              placeholder="Address"
+              required
+            >
+
+
+            <div class="field-row">
+
+              <input
+                type="text"
+                id="ckCity"
+                placeholder="City"
+                required
+              >
+
+              <input
+                type="text"
+                id="ckState"
+                placeholder="State"
+                required
+              >
+
+            </div>
+
+
+            <input
+              type="text"
+              id="ckPincode"
+              placeholder="Pincode"
+              required
+              pattern="[0-9]{6}"
+            >
+
+
+            <p class="pay-label">
+              Payment Method
+            </p>
+
+            <div class="pay-options">
+
+              <label>
+                <input
+                  type="radio"
+                  name="payment"
+                  value="COD"
+                  checked
+                >
+                Cash on Delivery
+              </label>
+
+              <label>
+                <input
+                  type="radio"
+                  name="payment"
+                  value="UPI"
+                >
+                UPI
+              </label>
+
+              <label>
+                <input
+                  type="radio"
+                  name="payment"
+                  value="Card"
+                >
+                Card
+              </label>
+
+            </div>
+
+          </div>
+
+
+          <div class="checkout-order-summary">
+
+            <h4>
+              Order Summary
+            </h4>
+
+            <div id="checkoutSummary"></div>
+
+            <button
+              type="submit"
+              class="btn btn-primary place-order-btn"
+            >
+              PLACE ORDER
+            </button>
+
+          </div>
+
+        </div>
+
+      </form>
+
+    </div>
+
+  </div>
+
+
+
+  <!-- Toast message -->
+  <div class="toast" id="toast"></div>
+
+
+  <script src="script.js"></script>
+
+</body>
+
+</html>
